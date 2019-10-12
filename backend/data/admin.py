@@ -1,6 +1,7 @@
 from django.contrib import admin
-from data.models import OcorrenciasMesData, ZonasEleitorais, VotacaoMunZona, PoliciaDpsAreas
+from data.models import Bairro, OcorrenciasMesData, ZonasEleitorais, VotacaoMunZona, PoliciaDpsAreas
 
+admin.site.register(Bairro)
 class OcorrenciasAdmin(admin.ModelAdmin):
     list_filter = ("ano", "aisp", "risp", "cisp")
 admin.site.register(OcorrenciasMesData, OcorrenciasAdmin)

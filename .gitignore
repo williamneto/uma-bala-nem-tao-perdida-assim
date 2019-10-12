@@ -5,3 +5,6 @@ backend/api/migrations/
 backend/data/__pycache__/
 backend/data/migrations/
 backend/data/csv/
+
+frontend/node_modules/
+frontend/package-lock.json

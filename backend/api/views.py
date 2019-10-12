@@ -4,7 +4,7 @@ from api.mixins import APIViewMixin
 
 from data.models import OcorrenciasMesData, PoliciaDpsAreas
 
-CRIMES_VIOLENTOS = ["lesao_corp_dolosa", "lesao_corp_culposa", "tentat_hom", "estupro", "hom_culposo", "hom_doloso", "latrocinio"]
+CRIMES_VIOLENTOS = ["roubo_transeunte", "roubo_celular", "lesao_corp_dolosa", "outros_roubos", "roubo_veiculo", "roubo_comercio", "roubo_em_coletivo", "tentat_hom", "roubo_apos_saque", "estupro", "roubo_bicicleta", "roubo_carga", "roubo_residencia", "hom_doloso", "hom_por_interv_policial", "roubo_conducao_saque", "roubo_banco", "sequestro_relampago", "sequestro", "latrocinio", "lesao_corp_morte", "pol_civis_mortos_serv", "pol_militares_mortos_serv"]
 class OcorrenciasView(APIViewMixin):
     get_services = ("get_ocorrencias", "get_top_ocorrencias")
 
@@ -20,12 +20,19 @@ class OcorrenciasView(APIViewMixin):
         if aisp:
             ocorrencias = OcorrenciasMesData.objects.all().filter(
                 ano=int(ano),
+                mes__lte=9,
                 aisp=aisp
             )
         elif risp:
             ocorrencias = OcorrenciasMesData.objects.all().filter(
                 ano=int(ano),
+                mes__lte=9,
                 risp=risp
+            )
+        else:
+            ocorrencias = OcorrenciasMesData.objects.all().filter(
+                ano=int(ano),
+                mes__lte=9,
             )
 
         indice = {
@@ -65,10 +72,10 @@ class OcorrenciasView(APIViewMixin):
             )
 
         indice = {}
-        fields = ["apf", "cmp", "cmba", "fase", "aaapai"]
+        fields = ["apf", "cmp", "cmba", "fase", "aaapai", "registro_ocorrencias", "indicador_roubo_rua", "outros_furtos"]
         for o in ocorrencias:
             for key, value in o.ocorrencias.items():
-                if not key in fields:
+                if not key in fields and not "furto_" in key and not "roubo" in key:
                     if len(key) > 1 and key in indice:
                         indice[key] += int(value or 0)
                     else:

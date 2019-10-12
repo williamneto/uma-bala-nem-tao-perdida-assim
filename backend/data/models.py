@@ -2,6 +2,13 @@
 from django_mysql.models import Model, JSONField
 from django.db import models
 
+class Bairro(models.Model):
+    nome = models.CharField(
+        max_length=300
+    )
+    aisp = models.IntegerField()
+    risp = models.IntegerField()
+    
 class OcorrenciasMesData(Model):
     cisp = models.IntegerField()
     mes = models.IntegerField()
