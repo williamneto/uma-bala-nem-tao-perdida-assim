@@ -12,7 +12,7 @@ class OcorrenciasMesData(Model):
         max_length=300
     )
     municipio = models.CharField(
-        max_length=300
+        max_length=400
     )
     mcirc = models.IntegerField()
     ocorrencias = JSONField()

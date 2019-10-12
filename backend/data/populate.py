@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 import csv
 from data.models import OcorrenciasMesData, VotacaoMunZona, ZonasEleitorais, PoliciaDpsAreas
 
@@ -6,6 +7,9 @@ meta = ['CISP', 'mes', 'vano', 'mes_ano', 'AISP', 'RISP', 'munic', 'mcirc', 'Reg
 def populate_ocorrenciasmesdata(filepath=None, start_year=None):
     if not filepath:
         filepath = "data/csv/BaseDPEvolucaoMensalCisp.csv"
+    
+    if not start_year:
+        start_year = datetime.now().year
     
     with open(filepath, encoding="ISO-8859-1") as file:
         csv_reader =  csv.reader(file, delimiter=";")
@@ -15,68 +19,43 @@ def populate_ocorrenciasmesdata(filepath=None, start_year=None):
                 header = row
                 line_count += 1
             else:
-                if start_year and int(row[header.index("vano")]) >= start_year:
-                    query = OcorrenciasMesData.objects.all().filter(
-                        mes=row[header.index("mes")],
-                        ano__gte=int(row[header.index("vano")])-1,
-                        cisp=row[header.index("CISP")],
-                        risp=row[header.index("RISP")],
-                        aisp=row[header.index("AISP")]
-                    )
-                    if len(query) == 0:
-                        mesdata_obj = OcorrenciasMesData(
-                            cisp=row[header.index("CISP")],
+                if "Rio de Janeiro" in row[header.index("munic")]:
+                    if int(row[header.index("vano")]) >= int(start_year):
+                        query = OcorrenciasMesData.objects.all().filter(
                             mes=row[header.index("mes")],
-                            ano=row[header.index("vano")],
-                            aisp=row[header.index("AISP")],
+                            ano__gte=int(row[header.index("vano")]),
+                            cisp=row[header.index("CISP")],
                             risp=row[header.index("RISP")],
-                            regiao=row[header.index("Regiao")],
-                            municipio=row[header.index("munic")],
-                            mcirc=row[header.index("mcirc")],
+                            aisp=row[header.index("AISP")]
                         )
 
-                        ocorrencias = {}
-                        item_count = 0
-                        for item in row:
-                            if not header[item_count] in meta:
-                                ocorrencias[header[item_count]] = item
-                            item_count += 1
-                        
-                        mesdata_obj.ocorrencias = ocorrencias
-                        mesdata_obj.save()
-                        print(">>>> Salvando %s/%s - %s" % (mesdata_obj.mes, mesdata_obj.ano, mesdata_obj.municipio))
-                elif not start_year:
-                    query = OcorrenciasMesData.objects.all().filter(
-                        mes=row[header.index("mes")],
-                        ano=row[header.index("vano")],
-                        cisp=row[header.index("CISP")],
-                        risp=row[header.index("RISP")],
-                        aisp=row[header.index("AISP")]
-                    )
-                    if len(query) == 0:
-                        mesdata_obj = OcorrenciasMesData(
-                            cisp=row[header.index("CISP")],
-                            mes=row[header.index("mes")],
-                            ano=row[header.index("vano")],
-                            aisp=row[header.index("AISP")],
-                            risp=row[header.index("RISP")],
-                            regiao=row[header.index("Regiao")],
-                            municipio=row[header.index("munic")],
-                            mcirc=row[header.index("mcirc")],
-                        )
+                        if len(query) == 0:
+                            mesdata_obj = OcorrenciasMesData(
+                                cisp=row[header.index("CISP")],
+                                mes=row[header.index("mes")],
+                                ano=row[header.index("vano")],
+                                aisp=row[header.index("AISP")],
+                                risp=row[header.index("RISP")],
+                                regiao=row[header.index("Regiao")],
+                                municipio=row[header.index("munic")],
+                                mcirc=row[header.index("mcirc")],
+                            )
 
-                        ocorrencias = {}
-                        item_count = 0
-                        for item in row:
-                            if not header[item_count] in meta:
-                                ocorrencias[header[item_count]] = item
-                            item_count += 1
-                        
-                        mesdata_obj.ocorrencias = ocorrencias
-                        mesdata_obj.save()
-                        print(">>>> Salvando %s/%s - %s" % (mesdata_obj.mes, mesdata_obj.ano, mesdata_obj.municipio))
-                    else:
-                        print(">>>> Já salvo %s/%s - %s" % (query[0].mes, query[0].ano, query[0].municipio))
+                            ocorrencias = {}
+                            item_count = 0
+                            for item in row:
+                                if not header[item_count] in meta:
+                                    ocorrencias[header[item_count]] = item
+                                item_count += 1
+                            
+                            mesdata_obj.ocorrencias = ocorrencias
+                            mesdata_obj.save()
+                            print(">>>> Salvando %s/%s - %s" % (mesdata_obj.mes, mesdata_obj.ano, mesdata_obj.municipio))
+                        else:
+                            print(">>>> Já salvo %s/%s - %s" % (query[0].mes, query[0].ano, query[0].municipio))
+                
+
+
 
 def populate_votacao_municipio_zona(file_path=None):
     if not file_path:
