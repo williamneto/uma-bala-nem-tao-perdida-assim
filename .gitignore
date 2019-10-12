@@ -1,0 +1,7 @@
+backend/backend/__pycache__/
+backend/backend/local_settings.py
+backend/api/__pycache__/
+backend/api/migrations/
+backend/data/__pycache__/
+backend/data/migrations/
+backend/data/csv/
