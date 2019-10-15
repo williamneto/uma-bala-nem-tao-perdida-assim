@@ -1,0 +1,35 @@
+.body, #app {
+    height: 100%;
+}
+
+.main {
+    margin: 0px 140px;
+    height: 70%;
+    background-color: #f6ca31;
+}
+
+.search {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 90px; 
+}
+#search {
+    width: 50%;
+    display: inline;
+    background-color: #ffffff59;
+    border-radius: .95rem;
+    width: 50%;
+    margin: 0 auto;
+}
+.search-btn {
+    color: black;
+    background-color: #007bff00;
+    border-color: #007bff00;
+}
+
+.middle {
+    background-color: #d7e0e0;
+}
+.panel-right {
+    background-color: #ff6736;
+}

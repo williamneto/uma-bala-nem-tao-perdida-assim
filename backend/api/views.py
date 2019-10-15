@@ -2,11 +2,25 @@
 from datetime import datetime
 from api.mixins import APIViewMixin
 
-from data.models import OcorrenciasMesData, PoliciaDpsAreas
+from data.models import Bairro, OcorrenciasMesData, PoliciaDpsAreas
 
 CRIMES_VIOLENTOS = ["roubo_transeunte", "roubo_celular", "lesao_corp_dolosa", "outros_roubos", "roubo_veiculo", "roubo_comercio", "roubo_em_coletivo", "tentat_hom", "roubo_apos_saque", "estupro", "roubo_bicicleta", "roubo_carga", "roubo_residencia", "hom_doloso", "hom_por_interv_policial", "roubo_conducao_saque", "roubo_banco", "sequestro_relampago", "sequestro", "latrocinio", "lesao_corp_morte", "pol_civis_mortos_serv", "pol_militares_mortos_serv"]
 class OcorrenciasView(APIViewMixin):
-    get_services = ("get_ocorrencias", "get_top_ocorrencias")
+    get_services = ("get_ocorrencias", "get_top_ocorrencias", "get_ocorrencias_by_bairro")
+
+    def _get_ocorrencias_by_bairro(self, data):
+        bairro = data.get("bairro")
+        aisp = None
+        for b in Bairro.objects.all():
+            if bairro.lower() in b.nome.lower():
+                aisp = b.aisp
+        
+        if aisp:
+            return self._get_ocorrencias(
+                data={"aisp": aisp}
+            )
+        else:
+            return {"status": "informe um bairro"}
 
     def _get_ocorrencias(self, data):
         response = {}

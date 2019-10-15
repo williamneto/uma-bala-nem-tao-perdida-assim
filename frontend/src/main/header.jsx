@@ -1,14 +1,12 @@
 import React from "react"
+import "./header.css"
 
 export default props => (
-    <div className="row">
-        <div className="col-sm-3">
-            Foca aqui
+    <div className="row header">
+        <div className="col-sm-6">
+            <img src="/images/header.png" className="header-img" />
         </div>
-        <div className="col-sm-5">
-            Descrição do nosso projeto
-        </div>
-        <div className="col-sm-4">
+        <div className="col-sm-6">
             Links
         </div>
     </div>
