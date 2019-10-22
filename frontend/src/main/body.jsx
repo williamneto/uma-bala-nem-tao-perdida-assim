@@ -3,11 +3,13 @@ import axios from "axios"
 import 'babel-polyfill';
 import qs from "qs"
 
+import Info from "./info"
 import "./body.css"
 
 const initialState = {
     "search": "",
-    "ocorrencias": null
+    "ocorrencias": null,
+    "bairros": null
 }
 const API_HOST = "http://localhost:8000/api/"
 
@@ -18,25 +20,12 @@ export default class Login extends Component {
         this.state = initialState
 
         this.inputChange = this.inputChange.bind(this)
-        this.loadSearchResults = this.loadSearchResults.bind(this)
         this.search = this.search.bind(this)
     }
 
     inputChange(e) {
         if (e.target.id == "search") {
             this.setState({"search": e.target.value})
-        }
-    }
-
-    loadSearchResults() {
-        if (this.state.ocorrencias) {
-            return this.state.ocorrencias.map(ocorrencias => (
-                <li>
-                    {Object.keys(ocorrencias).map( (key, value) => (
-                        <label>{key} - {ocorrencias[key]}</label>
-                    ))}
-                </li>
-            ))
         }
     }
 
@@ -52,8 +41,10 @@ export default class Login extends Component {
                 params: params
             })
             if(response) {
-                var ocorrencias = response.data.top_ocorrencias
-                this.setState({ ocorrencias: ocorrencias })
+                this.setState({ 
+                    ocorrencias: response.data.top_ocorrencias,
+                    bairros: response.data.bairros
+                })
             }
             
         }
@@ -66,11 +57,8 @@ export default class Login extends Component {
                     <b>Que bairro você quer consultar ?</b><br></br>
                     <input onChange={this.inputChange} type="text" id="search" className="form-control" placeholder="Digite um bairro..."></input>
                     <button onClick={this.search} className="search-btn"><i class="fa fa-arrow-circle-right fa-3" aria-hidden="true"></i></button>
-                    <div className="search-results">
-                        <ul>
-                            {this.loadSearchResults()}
-                        </ul>
-                    </div>
+                    
+                    <Info ocorrencias={this.state.ocorrencias} bairros={this.state.bairros} search={this.state.search}/>
                 </div>
                 <div className="middle col-sm-2"></div>
                 <div className="panel-right col-sm-5"></div>

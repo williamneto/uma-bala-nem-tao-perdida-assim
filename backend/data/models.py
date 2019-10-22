@@ -8,6 +8,9 @@ class Bairro(models.Model):
     )
     aisp = models.IntegerField()
     risp = models.IntegerField()
+
+    def __str__(self):
+        return self.nome
     
 class OcorrenciasMesData(Model):
     cisp = models.IntegerField()

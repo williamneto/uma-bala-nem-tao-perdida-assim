@@ -3,7 +3,7 @@
 }
 
 .main {
-    margin: 0px 140px;
+    margin: 30px 00px 60px;
     height: 70%;
     background-color: #f6ca31;
 }
@@ -18,13 +18,15 @@
     display: inline;
     background-color: #ffffff59;
     border-radius: .95rem;
-    width: 50%;
     margin: 0 auto;
 }
 .search-btn {
     color: black;
     background-color: #007bff00;
     border-color: #007bff00;
+}
+.search-results ul {
+    list-style: none;
 }
 
 .middle {

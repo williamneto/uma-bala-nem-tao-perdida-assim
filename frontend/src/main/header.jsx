@@ -7,7 +7,7 @@ export default props => (
             <img src="/images/header.png" className="header-img" />
         </div>
         <div className="col-sm-6">
-            Links
+            
         </div>
     </div>
 )
